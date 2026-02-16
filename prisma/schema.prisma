@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  RECRUITER
+  CANDIDATE
+  ENTERPRISE
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role
+  createdAt DateTime  @default(now())
+  vacancies Vacancy[]
+  resumes   Resume[]
+}
+
+model Vacancy {
+  id                 Int      @id @default(autoincrement())
+  userId             Int
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetaFeaturedJob String
+  JobTitle           String
+  Enterprise         String
+  location           String
+  modality           String
+  wage               String
+  typeOfContract     String
+  workShift          String
+  WorkSchedule       DateTime
+  daysWorkedPerWeek  String
+  workTime           String
+  skills             String[]
+  education          String
+  descriptionVacancy String
+  benefits           String[]
+  resumes            Resume[]
+}
+
+model Resume {
+  id        Int      @id @default(autoincrement())
+  url       String
+  createdAt DateTime @default(now())
+  vacancyId Int
+  vacancy   Vacancy  @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
