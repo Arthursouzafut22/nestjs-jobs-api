@@ -20,7 +20,10 @@ export class UserService {
       data: { ...user, password: await this.generateHash(user?.password) },
     });
 
-    return createUser;
+    return {
+      message: 'Usuário criado com sucesso',
+      createUser,
+    };
   }
 
   async generateHash(passwordUser: string) {
