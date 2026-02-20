@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  private expirationToken: number;
+  private expirationToken: string;
   private secret: string;
 
   constructor(
@@ -15,8 +15,8 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
   ) {
-    this.expirationToken = this.config.get<number>('JWT_EXPIRATION') as number;
-    this.secret = this.config.get<string>('JWT_TOKEN') as string;
+    this.expirationToken = this.config.get<string>('JWT_EXPIRATION') as string;
+    this.secret = this.config.get<string>('JWT_SECRET') as string;
   }
 
   async login(credentials: LoginDto) {
