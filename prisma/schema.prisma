@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -24,7 +18,7 @@ model User {
   name      String
   email     String    @unique
   password  String
-  role      Role @default(CANDIDATE)
+  role      Role      @default(CANDIDATE)
   createdAt DateTime  @default(now())
   vacancies Vacancy[]
   resumes   Resume[]
@@ -35,21 +29,25 @@ model Vacancy {
   userId             Int
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   targetaFeaturedJob String
-  JobTitle           String
-  Enterprise         String
+  jobTitle           String
+  enterprise         String
   location           String
   modality           String
   wage               String
   typeOfContract     String
   workShift          String
-  WorkSchedule       DateTime
+  workSchedule       String
   daysWorkedPerWeek  String
   workTime           String
   skills             String[]
   education          String
   descriptionVacancy String
+  requirements       String[]
+  differences        String[]
+  activities         String[]
   benefits           String[]
   resumes            Resume[]
+  createdAt          DateTime @default(now())
 }
 
 model Resume {
