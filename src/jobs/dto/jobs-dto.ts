@@ -69,5 +69,6 @@ export class JobsDto {
   descriptionVacancy: string;
 
   @IsArray()
+  @IsString({ each: true })
   benefits: string[];
 }

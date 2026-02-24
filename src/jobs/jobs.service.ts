@@ -10,6 +10,9 @@ export class JobsService {
     const postJobs = await this.prisma.vacancy.create({
       data: jobs,
     });
-    return postJobs;
+    return {
+      message: 'Vaga publicada com sucesso.',
+      postJobs,
+    };
   }
 }

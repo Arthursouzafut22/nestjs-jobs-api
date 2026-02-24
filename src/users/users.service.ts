@@ -27,13 +27,12 @@ export class UserService {
       throw new ConflictException('E-mail já está cadastrado!');
     }
 
-    const createUser = await this.prisma.user.create({
+    await this.prisma.user.create({
       data: { ...user, password: await this.generateHash(user?.password) },
     });
 
     return {
       message: 'Usuário criado com sucesso',
-      createUser,
     };
   }
 
