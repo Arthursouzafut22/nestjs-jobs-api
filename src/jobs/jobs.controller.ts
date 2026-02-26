@@ -7,17 +7,16 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
-import { JobsDto } from './dto/jobs-dto';
-import type { Request } from 'express';
+import { JobsDto } from './dto/create-jobs-dto';
 import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
 import { Roles } from 'src/decorators/roles.decorators';
 import { Role } from '@prisma/client';
 import { RolesGuard } from 'src/infra/providers/roles-guard.provider';
 import { User } from 'src/decorators/user.decorator';
+import { UpdateJobDto } from './dto/update-jobs-dto';
 
 @Controller('jobs')
 export class JobsController {
@@ -42,9 +41,24 @@ export class JobsController {
     return this.jobsService.findAllPublished();
   }
 
-  @Delete()
-  deleteVacancy() {}
+  @Delete('my-vacancies/:id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles([Role.RECRUITER, Role.ENTERPRISE])
+  deleteVacancy(
+    @Param('id', ParseIntPipe) id: number,
+    @User('id') userId: number,
+  ) {
+    return this.jobsService.deleteVacancy(id, userId);
+  }
 
-  @Patch()
-  updateVacancy() {}
+  @Patch('my-vacancies/:id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles([Role.RECRUITER, Role.ENTERPRISE])
+  updateVacancy(
+    @Body() data: UpdateJobDto,
+    @Param('id', ParseIntPipe) id: number,
+    @User('id') userId: number,
+  ) {
+    return this.jobsService.updateVacancy(data, id, userId);
+  }
 }
