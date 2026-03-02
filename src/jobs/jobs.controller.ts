@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
@@ -39,6 +40,11 @@ export class JobsController {
   @Get()
   findAllPublished() {
     return this.jobsService.findAllPublished();
+  }
+
+  @Get('filter')
+  searchJobs(@Query('search') search: string) {
+    return this.jobsService.searchJobs(search);
   }
 
   @Delete('my-vacancies/:id')

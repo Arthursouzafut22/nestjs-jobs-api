@@ -73,4 +73,21 @@ export class JobsService {
       throw new InternalServerErrorException('Erro ao atualizar vaga');
     }
   }
+
+  // Buscar produto pelo paratmetro de busvar na url...
+  async searchJobs(search: string) {
+    const searchJobs = await this.prisma.vacancy.findMany({
+      where: { jobTitle: search },
+    });
+
+    if (searchJobs.length === 0) {
+      return {
+        message: 'Nenhuma vaga encontrada',
+        searchJobs: [],
+      };
+    }
+
+    console.log(searchJobs);
+    return searchJobs;
+  }
 }
