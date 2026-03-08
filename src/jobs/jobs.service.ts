@@ -87,7 +87,6 @@ export class JobsService {
       };
     }
 
-    console.log(searchJobs);
     return searchJobs;
   }
 }

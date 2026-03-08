@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UploadDto } from './dto/upload-dto';
 import { createClient } from '@supabase/supabase-js';
@@ -47,21 +51,33 @@ export class UploadService {
     urlCurriculum: { data: { publicUrl: string } },
   ) {
     // Impede candidaturas duplicadas do mesmo usuário para a mesma vaga.
-    const checkCandidatura = await this.prisma.resume.findFirst({
+    const hasApplied = await this.prisma.resume.findFirst({
       where: { userId, vacancyId },
     });
 
-    if (checkCandidatura) {
+    if (hasApplied) {
       throw new ConflictException('Você já se candidatou nesta vaga');
     }
     // Realiza o processo de candidatura do usuário
-    const candidatarVaga = await this.prisma.resume.create({
+    const applyForJob = await this.prisma.resume.create({
       data: {
         url: urlCurriculum.data.publicUrl,
         userId,
         vacancyId,
       },
     });
-    return candidatarVaga;
+    return applyForJob;
+  }
+
+  // Recupera as candidaturas de uma vaga e gera, em paralelo, os links para download dos currículos recebidos.
+  async downloadCurriculum(vacancyId: number, userId: number) {
+    if (!vacancyId) {
+      throw new NotFoundException('Não encontrado');
+    }
+
+    const download = await this.prisma.resume.findFirst({
+      where: { userId, vacancyId },
+    });
+    return [download];
   }
 }
