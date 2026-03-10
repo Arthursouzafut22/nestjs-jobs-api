@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/auth/types/jwt-payload.type';
 import { ConfigService } from '@nestjs/config';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 @Injectable()
 export class UserService {
@@ -59,4 +60,8 @@ export class UserService {
       role,
     };
   }
+
+  async updateUser(data: UpdateUserDto, userId: number) {}
+
+  async deleteUser(userId: number){}
 }

@@ -21,6 +21,7 @@ import { Roles } from 'src/decorators/roles.decorators';
 import { Role } from '@prisma/client';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { UploadResumeDto } from './dto/upload-resume-dto';
+import type { UserPayload } from 'src/@types/user-payload.interface';
 
 @Controller('curriculum')
 export class UploadController {
@@ -41,10 +42,10 @@ export class UploadController {
       }),
     )
     file: UploadDto[],
-    @User('id', ParseIntPipe) userId: number,
+    @User() user: UserPayload,
     @Param('vacancyId', ParseIntPipe) vacancyId: number,
   ) {
-    return this.uploadService.uploadCurriculum(file, vacancyId, userId);
+    return this.uploadService.uploadCurriculum(file, vacancyId, user);
   }
 
   @Get('download/:vacancyId')
