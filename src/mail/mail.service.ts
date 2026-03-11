@@ -9,7 +9,11 @@ export class MailService {
     await this.email.sendMail({
       to: email,
       subject: 'Confirmação de candidatura',
-      text: `Você se candidatou para a vaga ${vacancyTitle}. Boa sorte!`,
+      html: `
+            <h2>Candidatura confirmada</h2>
+            <p>Você se candidatou para a vaga:</p>
+            <b>${vacancyTitle}</b>
+      `,
     });
   }
 }

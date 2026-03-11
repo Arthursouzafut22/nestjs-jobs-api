@@ -34,11 +34,13 @@ export class UsersController {
   }
 
   @Patch('update')
+  @UseGuards(AuthGuard)
   updateUser(@Body() data: UpdateUserDto, @User('id') userId: number) {
     return this.userService.updateUser(data, userId);
   }
 
   @Delete('delete')
+  @UseGuards(AuthGuard)
   deleteUser(@User('id') userId: number) {
     return this.userService.deleteUser(userId);
   }

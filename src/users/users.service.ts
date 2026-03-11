@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/dto-users';
 import * as bcrypt from 'bcrypt';
@@ -61,7 +65,20 @@ export class UserService {
     };
   }
 
-  async updateUser(data: UpdateUserDto, userId: number) {}
+  async updateUser(data: UpdateUserDto, userId: number) {
+    return await'nada'
+  }
 
-  async deleteUser(userId: number){}
+  // Deletar usuario do banco...
+  async deleteUser(userId: number) {
+    try {
+      await this.prisma.user.delete({ where: { id: userId } });
+      return { message: 'Usuario deletado com sucesso.' };
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Não foi possível deletar o usuário. Possíveis causas: usuário inexistente ou token de autenticação inválido.',
+      );
+    }
+  }
 }
