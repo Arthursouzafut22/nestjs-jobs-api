@@ -65,8 +65,8 @@ export class UserService {
     };
   }
 
-  async updateUser(data: UpdateUserDto, userId: number) {
-    return await'nada'
+  updateUser(data: UpdateUserDto, userId: number) {
+    return { ...data, userId };
   }
 
   // Deletar usuario do banco...
